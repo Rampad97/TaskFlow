@@ -41,7 +41,7 @@ public class TareaController {
     // Lista de tareas por ID de un proyecto
     @GetMapping("/proyecto/{proyectoId}")
     public List<Tarea> taskByProjectId(@PathVariable Integer projectId) {
-        return tareaService.getTasksbyUserId(projectId);
+        return tareaService.getTaskbyProjectId(projectId);
     }
 
     // Eliminar una tarea por ID

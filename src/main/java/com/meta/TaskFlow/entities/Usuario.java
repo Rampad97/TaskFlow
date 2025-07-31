@@ -1,21 +1,33 @@
 package com.meta.TaskFlow.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "usuario")
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
     private String nombre;
 
+    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "Debe proporcionar un email válido")
     @Column(unique = true)
     private String email;
 
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracters")
     private String password;
 
+    @NotNull(message = "El rol es obligatorio")
     @Enumerated(EnumType.STRING)
     private Rol rol;
 

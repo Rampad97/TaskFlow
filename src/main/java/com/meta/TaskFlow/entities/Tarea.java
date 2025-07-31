@@ -1,6 +1,10 @@
 package com.meta.TaskFlow.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -11,26 +15,34 @@ public class Tarea {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "El titulo de la tarea es obligatorio")
     private String titulo;
 
     private String descripcion;
 
+    @NotNull(message = "La fecha de inicio es obligatoria")
+    @FutureOrPresent(message = "La fecha de inicio no puede ser anterior a la actual")
     @Column(name = "fecha_inicio")
     private LocalDateTime fechaInicio;
 
+    @NotNull(message = "La fecha limite es obligatoria")
     @Column(name = "fecha_fin")
     private LocalDateTime fechaFin;
 
+    @NotNull(message = "Debe establecerse una prioridad")
     @Enumerated(EnumType.STRING)
     private Prioridad prioridad;
 
+    @NotNull(message = "Debe establecerse un estado")
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
+    @NotNull(message = "La tarea debe estar asignada a un usuario")
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @NotNull(message = "La tarea debe estar asociada a un proyecto")
     @ManyToOne
     @JoinColumn(name = "proyecto_id")
     private Proyecto proyecto;

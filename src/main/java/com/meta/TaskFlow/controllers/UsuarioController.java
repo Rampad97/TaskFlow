@@ -2,22 +2,23 @@ package com.meta.TaskFlow.controllers;
 
 import com.meta.TaskFlow.entities.Usuario;
 import com.meta.TaskFlow.services.interfaces.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/TaskFlow" +
-        "/usuarios")
+@RequestMapping("/TaskFlow/usuarios")
 public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
 
     // Crear nuevo usuario
     @PostMapping
-    public Usuario createUser(@RequestBody Usuario usuario) {
+    public Usuario createUser(@RequestBody @Valid Usuario usuario) {
         return usuarioService.newUser(usuario);
     }
 

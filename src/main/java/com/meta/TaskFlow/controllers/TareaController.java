@@ -2,6 +2,7 @@ package com.meta.TaskFlow.controllers;
 
 import com.meta.TaskFlow.entities.Tarea;
 import com.meta.TaskFlow.services.interfaces.TareaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class TareaController {
 
     // Crear nueva tarea
     @PostMapping
-    public Tarea createTask(@RequestBody Tarea tarea) {
+    public Tarea createTask(@RequestBody @Valid Tarea tarea) {
         return tareaService.newTask(tarea);
     }
 

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface TareaRepository extends JpaRepository<Tarea, Integer> {
     List<Tarea> findByUsuarioId(Integer usuarioId);
-    List<Tarea> findByProyectId(Integer proyectoId);
+    List<Tarea> findByProyecotId(Integer proyectoId);
 }

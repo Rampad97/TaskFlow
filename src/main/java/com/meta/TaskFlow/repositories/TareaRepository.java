@@ -7,5 +7,9 @@ import java.util.List;
 
 public interface TareaRepository extends JpaRepository<Tarea, Integer> {
     List<Tarea> findByUsuarioId(Integer usuarioId);
-    List<Tarea> findByProyectId(Integer proyectoId);
+<<<<<<< Updated upstream
+    List<Tarea> findByProyectoId(Integer proyectoId);
+=======
+    List<Tarea> findByProyectoId(Integer proyectoId);
+>>>>>>> Stashed changes
 }

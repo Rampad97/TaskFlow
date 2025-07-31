@@ -1,5 +1,6 @@
 package com.meta.TaskFlow.controllers;
 
+import com.meta.TaskFlow.entities.Estado;
 import com.meta.TaskFlow.entities.Tarea;
 import com.meta.TaskFlow.services.interfaces.TareaService;
 import jakarta.validation.Valid;
@@ -36,18 +37,24 @@ public class TareaController {
     // Lista de tareas por ID de un usuario
     @GetMapping("/usuario/{usuarioId}")
     public List<Tarea> taskByUserId(@PathVariable Integer usuarioId) {
-        return tareaService.getTasksbyUserId(usuarioId);
+        return tareaService.getTasksByUserId(usuarioId);
     }
 
     // Lista de tareas por ID de un proyecto
     @GetMapping("/proyecto/{proyectoId}")
-    public List<Tarea> taskByProjectId(@PathVariable Integer projectId) {
-        return tareaService.getTaskbyProjectId(projectId);
+    public List<Tarea> taskByProjectId(@PathVariable Integer proyectoId) {
+        return tareaService.getTaskByProjectId(proyectoId);
     }
 
     // Eliminar una tarea por ID
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Integer id) {
         tareaService.deleteTask(id);
+    }
+
+    // Actualizar estado de la tarea
+    @PatchMapping("/{id}/estado")
+    public Tarea updateTaskStatus(@PathVariable Integer id, @RequestParam Estado estado) {
+        return tareaService.updateStatus(id, estado);
     }
 }

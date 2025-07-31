@@ -35,8 +35,8 @@ public class TareaServiceImpl implements TareaService {
     }
 
     @Override
-    public List<Tarea> getTaskbyProjectId(Integer proyectoId) {
-        return tareaRepository.findByProyecotId(proyectoId);
+    public List<Tarea> getTaskbyProjectoId(Integer proyectoId) {
+        return tareaRepository.findByProyectoId(proyectoId);
     }
 
     @Override

@@ -8,3 +8,4 @@ import java.util.List;
 public interface TareaRepository extends JpaRepository<Tarea, Integer> {
     List<Tarea> findByUsuarioId(Integer usuarioId);
     List<Tarea> findByProyectoId(Integer proyectoId);
+}

@@ -1,6 +1,8 @@
 package com.meta.TaskFlow.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "proyecto")
@@ -9,10 +11,12 @@ public class Proyecto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "El nombre del proyecto es obligatorio")
     private String nombre;
 
     private String descripcion;
 
+    @NotNull(message = "Debe asignarse un lider al proyecto")
     @ManyToOne
     @JoinColumn(name = "lider_id")
     private Usuario lider;

@@ -4,11 +4,13 @@ import com.meta.TaskFlow.entities.Usuario;
 import com.meta.TaskFlow.services.interfaces.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/TaskFlow/usuarios")
@@ -18,19 +20,26 @@ public class UsuarioController {
 
     // Crear nuevo usuario
     @PostMapping
-    public Usuario createUser(@RequestBody @Valid Usuario usuario) {
-        return usuarioService.newUser(usuario);
+    public ResponseEntity<Map<String, Object>> createUser(@RequestBody @Valid Usuario usuario) {
+        Usuario u = usuarioService.newUser(usuario);
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", u.getId());
+        response.put("nombre", u.getNombre());
+        response.put("mensaje", "Usuario creado existosamente");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Lista de todos los usuarios
     @GetMapping
-    public List<Usuario> allUsers() {
-        return  usuarioService.getAllUsers();
+    public ResponseEntity<List<Usuario>> allUsers() {
+        List<Usuario> usuarios = usuarioService.getAllUsers();
+        return ResponseEntity.ok(usuarios);
     }
 
     // Buscar usuario por ID
     @GetMapping("/{id}")
-    public Optional<Usuario> userById(@PathVariable Integer id) {
-        return  usuarioService.getUserById(id);
+    public ResponseEntity<Usuario> userById(@PathVariable Integer id) {
+        Usuario usuario = usuarioService.getUserById(id);
+        return ResponseEntity.ok(usuario);
     }
 }

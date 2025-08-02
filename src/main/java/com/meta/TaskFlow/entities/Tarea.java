@@ -1,10 +1,7 @@
 package com.meta.TaskFlow.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -16,55 +13,54 @@ public class Tarea {
     private Integer id;
 
     @NotBlank(message = "El titulo de la tarea es obligatorio")
+    @Size(min = 3, max = 150, message = "El titulo de la tarea debe tener entre 3 y 150 caracteres")
     private String titulo;
-
-    private String descripcion;
 
     @NotNull(message = "La fecha de inicio es obligatoria")
     @FutureOrPresent(message = "La fecha de inicio no puede ser anterior a la actual")
     @Column(name = "fecha_inicio")
     private LocalDateTime fechaInicio;
 
-    @NotNull(message = "La fecha limite es obligatoria")
     @Column(name = "fecha_fin")
     private LocalDateTime fechaFin;
 
-    @NotNull(message = "Debe establecerse una prioridad")
-    @Enumerated(EnumType.STRING)
-    private Prioridad prioridad;
+    @NotBlank(message = "La prioridad es obligatoria")
+    @Pattern(regexp = "ALTA|MEDIA|BAJA", message = "Prioridad debe ser ALTA, MEDIA o BAJA")
+    private String prioridad;
 
-    @NotNull(message = "Debe establecerse un estado")
-    @Enumerated(EnumType.STRING)
-    private Estado estado;
+    @Column(nullable = false)
+    private boolean completada;
 
     @NotNull(message = "La tarea debe estar asignada a un usuario")
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
     @NotNull(message = "La tarea debe estar asociada a un proyecto")
     @ManyToOne
-    @JoinColumn(name = "proyecto_id")
+    @JoinColumn(name = "proyecto_id", nullable = false)
     private Proyecto proyecto;
 
-    @Transient
-    private long horasInvertidas;
+    @Transient //
+    private Long horasInvertidas;
 
+    // Constructores
     public Tarea() {
     }
 
-    public Tarea(Integer id, String titulo, String descripcion, LocalDateTime fechaInicio, LocalDateTime fechaFin, Prioridad prioridad, Estado estado, Usuario usuario, Proyecto proyecto, long horasInvertidas) {
+    public Tarea(Integer id, String titulo, LocalDateTime fechaInicio, LocalDateTime fechaFin, String prioridad, boolean completada, Usuario usuario, Proyecto proyecto, Long horasInvertidas) {
         this.id = id;
         this.titulo = titulo;
-        this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.prioridad = prioridad;
-        this.estado = estado;
+        this.completada = completada;
         this.usuario = usuario;
         this.proyecto = proyecto;
         this.horasInvertidas = horasInvertidas;
     }
+
+// Getters y setters
 
     public Integer getId() {
         return id;
@@ -80,14 +76,6 @@ public class Tarea {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
     }
 
     public LocalDateTime getFechaInicio() {
@@ -106,20 +94,20 @@ public class Tarea {
         this.fechaFin = fechaFin;
     }
 
-    public Prioridad getPrioridad() {
+    public String getPrioridad() {
         return prioridad;
     }
 
-    public void setPrioridad(Prioridad prioridad) {
+    public void setPrioridad(String prioridad) {
         this.prioridad = prioridad;
     }
 
-    public Estado getEstado() {
-        return estado;
+    public boolean isCompletada() {
+        return completada;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    public void setCompletada(boolean completada) {
+        this.completada = completada;
     }
 
     public Usuario getUsuario() {
@@ -138,14 +126,14 @@ public class Tarea {
         this.proyecto = proyecto;
     }
 
-    public void setHorasInvertidas(long horasInvertidas) {
-        this.horasInvertidas = horasInvertidas;
-    }
-
-    public long getHorasInvertidas() {
+    public Long getHorasInvertidas() {
         if (fechaInicio != null && fechaFin != null) {
             return java.time.Duration.between(fechaInicio, fechaFin).toHours();
         }
-        return 0;
+        return 0L;
+    }
+
+    public void setHorasInvertidas(Long horasInvertidas) {
+        this.horasInvertidas = horasInvertidas;
     }
 }

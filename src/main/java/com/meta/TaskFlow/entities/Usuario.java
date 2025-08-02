@@ -14,33 +14,22 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "El nombre es obligatorio")
-    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
+    @NotBlank(message = "El nombre del usuario es obligatorio")
+    @Size(max = 150, message = "El nombre no debe superar los 150 caracteres")
     private String nombre;
 
-    @NotBlank(message = "El email es obligatorio")
-    @Email(message = "Debe proporcionar un email válido")
-    @Column(unique = true)
-    private String email;
-
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracters")
-    private String password;
-
-    @NotNull(message = "El rol es obligatorio")
-    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Debe asignarse un rol")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
 
     // Constructores
-
     public Usuario() {
     }
 
-    public Usuario(Integer id, String nombre, String email, String password, Rol rol) {
+    public Usuario(Integer id, String nombre, Rol rol) {
         this.id = id;
         this.nombre = nombre;
-        this.email = email;
-        this.password = password;
         this.rol = rol;
     }
 
@@ -59,22 +48,6 @@ public class Usuario {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Rol getRol() {

@@ -2,16 +2,17 @@ package com.meta.TaskFlow.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionsHandler {
-    // Errores de validación
+    // Validaciones
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handlerValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
@@ -20,14 +21,27 @@ public class GlobalExceptionsHandler {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
+    // Maneja la excepción personalizada de recurso no encontrado
+    @ExceptionHandler(RecursoNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleRecursoNoEncontrado(RecursoNotFoundException ex) {
+        Map<String, String> respuesta = new HashMap<>();
+        respuesta.put("error", ex.getMessage());
+        return new ResponseEntity<>(respuesta, HttpStatus.NOT_FOUND);
+    }
+
+    // Argumentos inválidos
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
+        Map<String, String> respuesta = new HashMap<>();
+        respuesta.put("error", ex.getMessage());
+        return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
     }
 
     // Excepciones no controladas
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        return new ResponseEntity<>("Error interno del servidor: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Map<String, String>> handleException(Exception ex) {
+        Map<String, String> respuesta = new HashMap<>();
+        respuesta.put("error", "Error interno del servidor: " +  ex.toString());
+        return new ResponseEntity<>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
